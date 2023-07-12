@@ -10,12 +10,12 @@ import ru.netology.page.LoginPage;
 
 import javax.xml.crypto.Data;
 
-import static jdk.internal.jimage.BasicImageReader.open;
+import static com.codeborne.selenide.Selenide.open;
 
 public class LoginTest {
     @AfterAll
     static void teardown() {
-        cleanDatabase();
+        SQLHelper.cleanDatabase();
     }
 
     @Test
@@ -32,7 +32,7 @@ public class LoginTest {
     @Test
     @DisplayName("Should get error notification if user is not exist in base")
     void shouldGetErrorNotificationIfLoginWithRandomUserWithoutAddingToBase() {
-        var loginPage = open("http://localehost:9999", LoginPage.class);
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.generateRandomUser();
         loginPage.validLogin(authInfo);
         loginPage.verifyErrorNotificationVisiblity();
@@ -41,13 +41,13 @@ public class LoginTest {
     @Test
     @DisplayName("Should get error notification if login with exist in base and active user random verificatin code")
     void shouldGetErrorNotificationIfLoginWithExistUserAndRandomVerificationCode() {
-        var loginPage = open("http://localehost:9999", LoginPage.class);
+        var loginPage = open("http://localhost:9999", LoginPage.class);
         var authInfo = DataHelper.getAuthInfoWithTestData();
         var verificationPage = loginPage.validLogin(authInfo);
         verificationPage.verifyVerificationPageVisiblity();
         var verificationCode = DataHelper.generateRandomVerificationCode();
         verificationPage.verify(verificationCode.getCode());
-        verificationPage.verifyErrorNotificationVisiblty();
+        verificationPage.verifyErrorNotificationVisiblity();
     }
 }
 
